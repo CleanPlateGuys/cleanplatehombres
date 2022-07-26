@@ -1,6 +1,7 @@
 package cleanplate.cleanplatehombres.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name="org_info")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "listingList"})
 public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,12 +41,10 @@ public class Organization {
     private String images;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "organization")
-    @JsonManagedReference
     private List<Listing> listingList;
 
     public Boolean isDonor() {

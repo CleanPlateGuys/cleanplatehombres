@@ -1,5 +1,6 @@
 package cleanplate.cleanplatehombres.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_info")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "organizationList"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +28,6 @@ public class User {
     private Boolean isAdmin;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="user")
-    @JsonManagedReference
     private List<Organization> organizationList;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="user")

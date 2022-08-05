@@ -7,10 +7,13 @@
     <div th:replace="partials/head :: head"></div>
 <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"-->
 <!--          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">-->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js"></script>
 </head>
 <body>
 <nav th:replace="partials/topnav :: navbar">
 </nav>
+
 <div class="profile-header-holder underNav">
 
     <h1 class="profile-header headerStyles">RESTAURANT PARTNERS</h1>
@@ -62,7 +65,8 @@
 <footer th:replace="partials/footer.html :: footer"></footer>
 <script th:replace="partials/script.html :: script"></script>
 
-
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css" type="text/css">
 <script th:inline="javascript">
     /*<![CDATA[*/
     mapboxgl.accessToken = MAPBOX_KEY;
@@ -72,6 +76,18 @@
         center: [-98.4916, 29.4252],
         zoom: 7
     });
+    // var directions = new MapboxDirections({
+    //     // unit: 'metric',
+    //     profile: 'mapbox/cycling'
+    // });
+    // map.addControl(directions, 'top-left');
+    map.addControl(
+        new MapboxDirections({
+            accessToken: mapboxgl.accessToken
+        }),
+        'top-left'
+    );
+
     var test = /*[[${organizations}]]*/ 'Test Default';
     // console.log(test);
     var orgName = test.map(({orgName}) => orgName)
@@ -98,7 +114,7 @@
 
     function placeMarkerAndPopup(name, address, token, map) {
         geocode(address, token).then(function (coordinates) {
-            var popup = new mapboxgl.Popup()
+            var popup = new mapboxgl.Popup({ offset: 25 })
                 .setHTML(
                     "<div style='max-width: 130px; display: flex;flex-wrap: wrap'> "+
                     "<h6 style='font-size: 15px'>" + name + "</h6>" +
